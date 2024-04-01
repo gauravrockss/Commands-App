@@ -1,9 +1,13 @@
 package com.projects.katat;
 
 
+import java.io.FileReader;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
+
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 
 public class Main {
@@ -12,7 +16,7 @@ public class Main {
     private static final Stack<String> redoHistory = new Stack<>();
     private static String[] commands;
     public static void main(String[] args) {
-        // loadCommands();
+        loadCommands();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
@@ -28,10 +32,10 @@ public class Main {
                     listCommands();
                     break;
                 case "u":
-                    // undoCommand();
+                    undoCommand();
                     break;
                 case "r":
-                    // redoCommand();
+                    redoCommand();
                     break;
                 case "q":
                     running = false;
@@ -67,6 +71,39 @@ public class Main {
         System.out.println("\nList of Available Commands:");
         for (int i = 0; i < commands.length; i++) {
             System.out.println((i + 1) + ". " + commands[i]);
+        }
+    }
+
+    private static void undoCommand() {
+        if (!commandHistory.isEmpty()) {
+            String undoneCommand = commandHistory.pop();
+            System.out.println("Undoing command: " + undoneCommand);
+            redoHistory.push(undoneCommand);
+        } else {
+            System.out.println("No command to undo.");
+        }
+    }
+
+    private static void redoCommand() {
+        if (!redoHistory.isEmpty()) {
+            String redoneCommand = redoHistory.pop();
+            System.out.println("Redoing command: " + redoneCommand);
+            commandHistory.push(redoneCommand);
+        } else {
+            System.out.println("No command to redo.");
+        }
+    }
+
+    private static void loadCommands() {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(COMMANDS_FILE_PATH));
+            commands = new String[jsonArray.size()];
+            for (int i = 0; i < jsonArray.size(); i++) {
+                commands[i] = (String) jsonArray.get(i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
