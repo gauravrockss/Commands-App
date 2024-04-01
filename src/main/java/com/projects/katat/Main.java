@@ -1,6 +1,7 @@
 package com.projects.katat;
 
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -21,7 +22,7 @@ public class Main {
 
             switch (input) {
                 case "i":
-                    // issueCommand();
+                    issueCommand();
                     break;
                 case "l":
                     listCommands();
@@ -42,6 +43,14 @@ public class Main {
         }
 
         scanner.close();
+    }
+
+        private static void issueCommand() {
+        Random random = new Random();
+        int index = random.nextInt(commands.length);
+        String command = commands[index];
+        System.out.println("Issuing command: " + command);
+        commandHistory.push(command);
     }
 
     private static void displayMenu() {
