@@ -27,7 +27,7 @@ public class Main {
                     break;
                 case "q":
                     running = false;
-                    System.out.println("Exiting application...");
+                    System.out.println("Exiting from the application...");
                     break;
                 default:
                     System.out.println("Invalid command. Please try again.");
